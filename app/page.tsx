@@ -9,7 +9,7 @@ export default function Home() {
   const [apiResponse, setApiResponse] = useState(null)
   const [selectedFilters, setSelectedFilters] = useState(['alphabets', 'numbers', 'highest_lowercase_alphabet'])
 
-  const handleApiResponse = (response) => {
+  const handleApiResponse = (response: any) => {
     setApiResponse(response)
   }
 

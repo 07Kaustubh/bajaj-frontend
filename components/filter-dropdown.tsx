@@ -1,21 +1,27 @@
-'use client'
+'use client';
 
-import { Checkbox } from '@/components/ui/checkbox'
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dispatch, SetStateAction } from 'react';
+
+interface FilterDropdownProps {
+  selectedFilters: string[]; // Array of selected filter IDs
+  setSelectedFilters: Dispatch<SetStateAction<string[]>>; // Function to update the selected filters
+}
 
 const filterOptions = [
   { id: 'alphabets', label: 'Alphabets' },
   { id: 'numbers', label: 'Numbers' },
   { id: 'highest_lowercase_alphabet', label: 'Highest lowercase alphabet' },
-]
+];
 
-export function FilterDropdown({ selectedFilters, setSelectedFilters }) {
-  const handleFilterChange = (filterId) => {
+export function FilterDropdown({ selectedFilters, setSelectedFilters }: FilterDropdownProps) {
+  const handleFilterChange = (filterId: string) => {
     setSelectedFilters((prev) =>
       prev.includes(filterId)
         ? prev.filter((id) => id !== filterId)
         : [...prev, filterId]
-    )
-  }
+    );
+  };
 
   return (
     <div className="space-y-2 my-4">
@@ -31,6 +37,5 @@ export function FilterDropdown({ selectedFilters, setSelectedFilters }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
-
