@@ -7,15 +7,29 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
+interface ApiResponse {
+  is_success: boolean;
+  user_id: string;
+  email: string;
+  roll_number: string;
+  alphabets?: string[];
+  numbers?: number[];
+  highest_lowercase_alphabet?: string;
+  is_prime_found: boolean;
+  file_valid?: boolean;
+  file_mime_type?: string;
+  file_size_kb?: number;
+}
+
 interface JsonInputProps {
-  onApiResponse: (data: any) => void; // Define a more specific type for `data` if possible
+  onApiResponse: (data: ApiResponse) => void;
 }
 
 export function JsonInput({ onApiResponse }: JsonInputProps) {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +43,6 @@ export function JsonInput({ onApiResponse }: JsonInputProps) {
         throw new Error("Invalid input: 'data' must be an array.");
       }
 
-      // Handle file upload
       let file_b64: string | null = null;
       if (file) {
         file_b64 = await new Promise<string | null>((resolve, reject) => {
@@ -61,13 +74,13 @@ export function JsonInput({ onApiResponse }: JsonInputProps) {
         throw new Error('API request failed');
       }
 
-      const data = await response.json();
+      const data: ApiResponse = await response.json();
       onApiResponse(data);
-    } catch (err: any) {
+    } catch (err) {
       setError(
         err instanceof SyntaxError
           ? 'Invalid JSON format. Please check your input.'
-          : err.message || 'An unexpected error occurred.'
+          : (err as Error).message || 'An unexpected error occurred.'
       );
     } finally {
       setIsLoading(false);
